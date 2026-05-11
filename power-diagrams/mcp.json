@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "diagrams-mcp": {
+      "url": "https://diagrams-mcp-production.up.railway.app/mcp",
+      "disabled": false,
+      "autoApprove": []
+    },
+    "uml-mcp": {
+      "url": "https://uml-mcp.vercel.app/mcp",
+      "disabled": false,
+      "autoApprove": []
+    },
+    "mcp-mermaid": {
+      "command": "npx",
+      "args": ["-y", "mcp-mermaid"],
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
