@@ -24,25 +24,27 @@ This power combines **three rendering engines** into a single Kiro Power, giving
 
 ## Installation
 
+### From GitHub (Recommended)
+
+1. Open Kiro IDE
+2. Open the Powers panel (click the Ghosty icon with lightning bolt ⚡)
+3. Click **"Add power from GitHub"**
+4. Enter the repository URL: `https://github.com/intraedge-services/kiro-powers-diagrams`
+5. Click Install — the power installs and MCP servers register automatically in `~/.kiro/settings/mcp.json`
+
 ### From Local Path (Development)
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/<your-org>/kiro-powers-diagrams.git
+   git clone https://github.com/intraedge-services/kiro-powers-diagrams.git
    ```
 2. Open Kiro IDE
 3. Open the Powers panel (click the Ghosty icon with lightning bolt ⚡)
 4. Click **"Add power from Local Path"**
-5. Select the `power-diagrams/` directory
+5. Select the **repository root** directory (the folder containing `POWER.md`)
 6. The power is now installed and activates automatically on keyword mention
 
-### From GitHub (Recommended)
-
-1. Open Kiro IDE
-2. Open the Powers panel
-3. Click **"Add power from GitHub"**
-4. Enter the repository URL
-5. Done — the power installs and activates automatically
+> **Important**: When installing from local path, select the directory that contains `POWER.md` at its root — not a subdirectory.
 
 ## Usage
 
@@ -92,15 +94,18 @@ The power activates when you mention: diagram, flowchart, sequence diagram, arch
 ## Power Structure
 
 ```
-power-diagrams/
+kiro-powers-diagrams/                     # Repository root
 ├── POWER.md                              # Metadata, onboarding, tool guide
 ├── mcp.json                              # MCP server configuration
-└── steering/
-    ├── diagram-type-selection.md         # When to use which diagram type
-    ├── mermaid-reference.md              # Mermaid syntax quick-reference
-    ├── plantuml-reference.md             # PlantUML syntax quick-reference
-    ├── cloud-architecture-guide.md       # Cloud architecture patterns
-    └── workflow-patterns.md              # Diagramming workflow patterns
+├── README.md                             # This file
+├── LICENSE                               # License
+├── steering/                             # Steering files (loaded contextually)
+│   ├── diagram-type-selection.md         # When to use which diagram type
+│   ├── mermaid-reference.md              # Mermaid syntax quick-reference
+│   ├── plantuml-reference.md             # PlantUML syntax quick-reference
+│   ├── cloud-architecture-guide.md       # Cloud architecture patterns
+│   └── workflow-patterns.md              # Diagramming workflow patterns
+└── aidlc-docs/                           # AI-DLC development documentation
 ```
 
 ## Steering Files
@@ -131,6 +136,15 @@ The power includes comprehensive steering files that Kiro loads contextually:
 - **Command**: `npx -y mcp-mermaid`
 - **Tools**: `mermaid_to_image`
 - **Source**: [hustcc/mcp-mermaid](https://github.com/hustcc/mcp-mermaid)
+
+## How MCP Servers Get Registered
+
+When you install this power, Kiro **automatically** registers the three MCP servers in your `~/.kiro/settings/mcp.json` under the Powers section. You do **not** need to manually create or edit any `mcp.json` file in your workspace.
+
+If the servers don't appear after installation:
+1. Check `~/.kiro/settings/mcp.json` — the servers should be listed there
+2. If missing, try reinstalling the power
+3. Servers reconnect automatically when the config file is saved
 
 ## Troubleshooting
 

@@ -15,16 +15,21 @@
 ## Power Structure
 
 ```
-power-diagrams/
-├── POWER.md                              # 150+ lines — metadata, onboarding, tool guide
-├── mcp.json                              # 3 MCP servers configured
-└── steering/
-    ├── diagram-type-selection.md         # Decision matrix with 20+ diagram types
-    ├── mermaid-reference.md              # 10 diagram types with syntax examples
-    ├── plantuml-reference.md             # 7 diagram types with full examples
-    ├── cloud-architecture-guide.md       # 5 architecture patterns with code
-    └── workflow-patterns.md              # 5 workflow patterns for different scenarios
+kiro-powers-diagrams/                     # Repository root (= power root)
+├── POWER.md                              # Metadata, onboarding, steering mappings
+├── mcp.json                              # MCP server configuration (3 servers)
+├── steering/                             # Steering files (loaded contextually by Kiro)
+│   ├── diagram-type-selection.md         # Decision matrix with 20+ diagram types
+│   ├── mermaid-reference.md              # 10 diagram types with syntax examples
+│   ├── plantuml-reference.md             # 7 diagram types with full examples
+│   ├── cloud-architecture-guide.md       # 5 architecture patterns with code
+│   └── workflow-patterns.md              # 5 workflow patterns for different scenarios
+├── README.md                             # User documentation
+├── LICENSE                               # MIT license
+└── aidlc-docs/                           # AI-DLC development process documentation
 ```
+
+**Critical**: `POWER.md` MUST be at the repository root. Kiro looks for it there when installing from GitHub.
 
 ## MCP Servers
 
