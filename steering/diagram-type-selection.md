@@ -27,6 +27,18 @@ Use this guide to choose the right diagram type and rendering engine for your ta
 | Proportional data | Pie Chart | mcp-mermaid | `mermaid_to_image` |
 | Priority/categorization | Quadrant Chart | mcp-mermaid | `mermaid_to_image` |
 
+## Engine Selection Priority
+
+**IMPORTANT**: Always prefer `diagrams-mcp` for PlantUML and Mermaid rendering. It returns reliable hosted image links (Railway). Only use `uml-mcp` for diagram types that `diagrams-mcp` doesn't support.
+
+| Diagram Type | Primary Engine | Fallback |
+|-------------|---------------|----------|
+| Cloud Architecture | diagrams-mcp (`render_diagram`) | — |
+| PlantUML (sequence, class, component, state, deployment, activity, use case) | diagrams-mcp (`render_plantuml`) | uml-mcp (kroki.io links — may have availability issues) |
+| Mermaid (flowchart, ER, Gantt, state, sequence, class, pie, mindmap) | diagrams-mcp (`render_mermaid`) | mcp-mermaid (local, themed) |
+| D2, Graphviz, BPMN, C4, TikZ, Nomnoml, Pikchr, etc. | uml-mcp (`generate_uml`) | — |
+| Batch generation (multiple diagrams) | uml-mcp (`generate_uml_batch`) | — |
+
 ## Engine Selection by Scenario
 
 ### Software Architecture Documentation

@@ -40,11 +40,15 @@ The power uses two remote hosted servers (zero installation) and one local serve
 Use this decision tree to pick the right server for each task:
 
 1. **Need cloud architecture with real provider icons?** → Use `diagrams-mcp` (`render_diagram`)
-2. **Need UML, D2, Graphviz, BPMN, C4, or exotic diagram types?** → Use `uml-mcp` (`generate_uml`)
-3. **Need quick Mermaid with custom themes/colors?** → Use `mcp-mermaid` (`mermaid_to_image`)
-4. **Need to validate syntax before rendering?** → Use `uml-mcp` (`validate_uml`) or `diagrams-mcp` (`render_mermaid`)
-5. **Need batch generation (multiple diagrams at once)?** → Use `uml-mcp` (`generate_uml_batch`)
-6. **Working offline?** → Use `mcp-mermaid` (local npx)
+2. **Need PlantUML diagrams (sequence, class, component, state, etc.)?** → Use `diagrams-mcp` (`render_plantuml`) — gives reliable hosted links
+3. **Need Mermaid diagrams (flowchart, ER, Gantt, etc.)?** → Use `diagrams-mcp` (`render_mermaid`) — gives reliable hosted links
+4. **Need quick Mermaid with custom themes/colors?** → Use `mcp-mermaid` (`generate_mermaid_diagram`)
+5. **Need exotic types (D2, Graphviz, BPMN, C4, TikZ, etc.)?** → Use `uml-mcp` (`generate_uml`) — note: returns kroki.io links which may have availability issues
+6. **Need to validate syntax before rendering?** → Use `uml-mcp` (`validate_uml`)
+7. **Need batch generation (multiple diagrams at once)?** → Use `uml-mcp` (`generate_uml_batch`)
+8. **Working offline?** → Use `mcp-mermaid` (local npx)
+
+**Important**: Prefer `diagrams-mcp` for PlantUML and Mermaid rendering — it returns reliable hosted image links. Use `uml-mcp` only for diagram types that `diagrams-mcp` doesn't support (D2, Graphviz, BPMN, C4, TikZ, Nomnoml, etc.).
 
 ## Step 3: Quick Test
 
