@@ -1,0 +1,13 @@
+# Kiro IDE settings (user-specific)
+.kiro/settings/
+
+# AI-DLC rule details (workspace tooling, not part of the power)
+.kiro/aws-aidlc-rule-details/
+.kiro/steering/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node modules (if mcp-mermaid is tested locally)
+node_modules/
