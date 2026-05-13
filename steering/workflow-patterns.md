@@ -2,19 +2,68 @@
 
 Patterns for integrating diagrams into your development workflow effectively.
 
-## Workflow 1: Architecture-First (Design → Diagram → Code)
+## Workflow 1: RFP / Proposal Quality (Draw.io First)
+
+Best for: Client-facing documents, RFPs, proposals, executive presentations
+
+### Steps
+1. **Understand requirements** — What architecture/process needs to be shown
+2. **Search shapes** — Use `search_shapes` to find correct icons for all services
+3. **Generate draw.io XML** — Build professional XML with proper containers, styling, and layout
+4. **Open in draw.io** — Use `open_drawio_xml` to render
+5. **Refine** — User can manually adjust in draw.io editor
+6. **Export** — Save as PNG/SVG/PDF for the document
+
+### Example Prompt Sequence
+```
+1. "Search for AWS shapes: EC2, RDS, Lambda, S3, CloudFront, API Gateway, VPC"
+2. "Create a professional AWS architecture diagram showing our 3-tier application with CloudFront, ALB, ECS in private subnet, Aurora PostgreSQL, and ElastiCache. Use proper VPC/subnet containers."
+3. "Now create a sequence diagram showing the authentication flow for the same system"
+```
+
+### Key Principles
+- Always use `search_shapes` before generating XML
+- Use proper container hierarchy (Cloud → Region → VPC → Subnet → Service)
+- Apply consistent color scheme (see drawio-xml-guide.md)
+- Use orthogonal edge routing for clean connections
+- Add titles and legends for complex diagrams
+
+---
+
+## Workflow 2: AWS Architecture (drawio-aws)
+
+Best for: AWS-specific architecture diagrams with official icons
+
+### Steps
+1. **Describe architecture** — Clearly state services, connections, and groupings
+2. **Let drawio-aws generate** — It produces .drawio files with official AWS icons
+3. **Open and refine** — Edit in draw.io desktop if needed
+4. **Export** — PNG/SVG/PDF for documentation
+
+### Example Prompts
+```
+"Create an AWS serverless architecture with CloudFront, API Gateway, Lambda (container-based from ECR), Aurora PostgreSQL, OpenSearch, S3, and Bedrock. Include Cognito for auth, IAM roles, and CodePipeline for deployment. Show VPC and private subnet structure."
+
+"Create a multi-AZ AWS deployment with ALB, ECS Fargate across 2 AZs, Aurora with read replicas, ElastiCache cluster, and S3 for static assets."
+
+"Create an AWS event-driven architecture with EventBridge, multiple Lambda functions, SQS queues, DynamoDB streams, and SNS for notifications."
+```
+
+---
+
+## Workflow 3: Architecture-First (Design → Diagram → Code)
 
 Best for: New projects, major features, system redesigns
 
 ### Steps
 1. **Define requirements** — Understand what the system needs to do
-2. **Create C4 Context diagram** — Show system boundaries and external actors (uml-mcp, c4plantuml)
-3. **Create C4 Container diagram** — Show major containers/services (uml-mcp, c4plantuml)
-4. **Create Cloud Architecture diagram** — Map to actual infrastructure (diagrams-mcp)
-5. **Create Sequence diagrams** — Detail key interactions (uml-mcp or mcp-mermaid)
-6. **Create ERD** — Define data model (mcp-mermaid)
+2. **Create C4 Context diagram** — System boundaries and external actors (drawio XML)
+3. **Create C4 Container diagram** — Major containers/services (drawio XML)
+4. **Create Cloud Architecture diagram** — Map to infrastructure (drawio-aws)
+5. **Create Sequence diagrams** — Detail key interactions (drawio `open_drawio_mermaid`)
+6. **Create ERD** — Define data model (drawio XML or mcp-mermaid)
 7. **Implement** — Use diagrams as implementation guide
-8. **Update diagrams** — Reflect any implementation changes
+8. **Update diagrams** — Reflect implementation changes
 
 ### Example Prompt Sequence
 ```
@@ -25,143 +74,132 @@ Best for: New projects, major features, system redesigns
 5. "Create an ERD for the order management data model"
 ```
 
-## Workflow 2: Code-First (Code → Analyze → Diagram)
+---
+
+## Workflow 4: Code-First (Code → Analyze → Diagram)
 
 Best for: Documenting existing systems, onboarding, code reviews
 
 ### Steps
 1. **Analyze codebase** — Understand existing structure
-2. **Create Component diagram** — Show discovered components (uml-mcp, plantuml)
-3. **Create Class diagram** — Document key domain models (uml-mcp, plantuml)
-4. **Create Sequence diagrams** — Document critical flows (mcp-mermaid)
-5. **Create Deployment diagram** — Document current infrastructure (diagrams-mcp)
+2. **Create Component diagram** — Show discovered components (drawio XML)
+3. **Create Class diagram** — Document key domain models (drawio XML with UML shapes)
+4. **Create Sequence diagrams** — Document critical flows (drawio `open_drawio_mermaid`)
+5. **Create Deployment diagram** — Document current infrastructure (drawio-aws)
 
-### Example Prompt Sequence
+---
+
+## Workflow 5: Quick Developer Documentation
+
+Best for: Internal docs, README diagrams, PR descriptions
+
+### Steps
+1. **Draft with Mermaid** — Quick syntax, fast iteration
+2. **Render** — Use `mcp-mermaid` for themed output or `diagrams-mcp` for cloud diagrams
+3. **Embed** — PNG in markdown, URL in PR comments
+
+### Example Prompts
 ```
-1. "Analyze the src/ directory and create a component diagram showing the main modules"
-2. "Create a class diagram for the domain models in src/models/"
-3. "Create a sequence diagram showing how the authentication flow works based on the code"
-4. "Create an AWS architecture diagram showing our current deployment"
+"Create a quick flowchart showing the CI/CD pipeline"
+"Generate a Mermaid sequence diagram for the login flow"
+"Create a quick AWS architecture diagram with diagrams-mcp showing our ECS setup"
 ```
 
-## Workflow 3: Documentation Sprint
+---
+
+## Workflow 6: Draft-to-Polish Pipeline
+
+Best for: Starting quick, then upgrading to professional quality
+
+### Steps
+1. **Quick draft** — Use Mermaid or diagrams-mcp for rapid iteration
+2. **Review** — Confirm the content and structure is correct
+3. **Convert to draw.io** — Use `open_drawio_mermaid` to convert Mermaid to editable draw.io
+4. **Polish** — Refine in draw.io editor (adjust layout, add icons, apply styling)
+5. **Export** — Final PNG/SVG/PDF
+
+This workflow is ideal when you need to iterate on content quickly but deliver polished output.
+
+---
+
+## Workflow 7: Documentation Sprint (Batch)
 
 Best for: Creating comprehensive docs for a project or feature
 
-### Steps
-1. **Plan diagram set** — Decide which diagrams are needed
-2. **Batch generate** — Use `generate_uml_batch` for multiple diagrams at once
-3. **Review and refine** — Iterate on individual diagrams
-4. **Export** — Save in appropriate formats for your docs platform
-
 ### Recommended Diagram Set for a Service
 
-| Diagram | Type | Purpose |
-|---------|------|---------|
-| System Context | C4 | Where this service fits in the ecosystem |
-| Container View | C4 | Internal structure of the service |
-| Cloud Architecture | diagrams-mcp | Infrastructure and deployment |
-| Key Sequence Diagrams (2-3) | Mermaid/PlantUML | Critical user flows |
-| ERD | Mermaid | Data model |
-| State Diagram | Mermaid | Key state machines |
+| Diagram | Engine | Purpose |
+|---------|--------|---------|
+| System Context (C4) | drawio | Where this service fits in the ecosystem |
+| Container View (C4) | drawio | Internal structure |
+| Cloud Architecture | drawio-aws | Infrastructure and deployment |
+| Key Sequence Diagrams (2-3) | drawio (mermaid) | Critical user flows |
+| ERD | drawio or mcp-mermaid | Data model |
+| State Diagram | mcp-mermaid | Key state machines |
 
-### Example Batch Generation
+### For Batch Generation (Developer Docs)
+Use `uml-mcp` with `generate_uml_batch` for multiple diagrams at once:
 ```
 "Generate a batch of diagrams for the Order Service:
 1. A sequence diagram for order creation
-2. A sequence diagram for order cancellation
+2. A sequence diagram for order cancellation  
 3. A state diagram for order lifecycle
 4. An ERD for order-related tables"
 ```
 
-## Workflow 4: Iterative Refinement
-
-Best for: Getting a diagram just right through multiple passes
-
-### Pattern
-1. **Generate initial version** — Quick first draft
-2. **Validate** — Use `validate_uml` to check syntax
-3. **Refine content** — Add missing elements, fix relationships
-4. **Style** — Apply themes, adjust layout direction
-5. **Export** — Choose final format
-
-### Tips for Iteration
-- Start simple, add complexity incrementally
-- Use validation between iterations to catch errors early
-- Change `direction` (LR vs TD) to find best layout
-- Try different themes with mcp-mermaid (`dark`, `forest`, `neutral`)
-- Split overly complex diagrams into focused sub-diagrams
-
-## Workflow 5: Multi-View Architecture Documentation
-
-Best for: Comprehensive architecture documentation (like arc42 or C4)
-
-### Views to Create
-
-| View | Diagram Types | Engine |
-|------|--------------|--------|
-| Context | C4 Context | uml-mcp |
-| Containers | C4 Container | uml-mcp |
-| Components | C4 Component, Component Diagram | uml-mcp |
-| Runtime | Sequence Diagrams | mcp-mermaid or uml-mcp |
-| Deployment | Cloud Architecture | diagrams-mcp |
-| Data | ERD, Class Diagram | mcp-mermaid, uml-mcp |
-| Crosscutting | Flowcharts (auth, error handling) | mcp-mermaid |
-
-### Example Prompt Sequence
-```
-1. "Create a C4 context diagram for our platform"
-2. "Create a C4 container diagram showing all microservices"
-3. "Create a C4 component diagram for the Order Service"
-4. "Create sequence diagrams for: login, place order, process payment"
-5. "Create an AWS deployment diagram showing ECS, RDS, and networking"
-6. "Create an ERD for the complete data model"
-7. "Create a flowchart showing the error handling strategy"
-```
+---
 
 ## Output Format Strategy
+
+### For RFPs / Proposals / Client Documents
+- Generate with `drawio` or `drawio-aws`
+- Export to **PDF** (print-quality) or **PNG** (high-res)
+- Keep .drawio source file for future edits
 
 ### For GitHub/GitLab Documentation
 - Use **PNG** saved to a `docs/diagrams/` folder
 - Reference in markdown: `![Architecture](docs/diagrams/architecture.png)`
-- Use `file` output type with mcp-mermaid or render_diagram with diagrams-mcp
+- Keep .drawio source files in same directory for editability
 
 ### For Confluence/Wiki
 - Use **PNG** for static pages
 - Use **SVG** for interactive/zoomable diagrams
-- Use **URLs** (mcp-mermaid `png_url`/`svg_url`) for always-up-to-date links
+- Keep .drawio files attached for team editing
 
 ### For Presentations
 - Use **SVG** for scalable slides
-- Use **PNG** at high resolution for static slides
-- Keep diagrams simple (max 10-12 nodes for readability at presentation scale)
+- Keep diagrams simple (max 10-12 nodes for readability)
+- Use draw.io's export with transparent background
 
 ### For Code Reviews / PRs
-- Use **URLs** for quick sharing in PR comments
+- Use **URLs** (mcp-mermaid `png_url`/`svg_url`) for quick sharing
 - Use **PNG** embedded in PR description for architecture changes
-- Include diagram source in a `docs/` folder for version control
+
+---
 
 ## Naming Conventions
-
-Consistent naming helps organize diagram files:
 
 ```
 docs/diagrams/
 ├── architecture/
-│   ├── system-context.png
-│   ├── container-view.png
-│   └── aws-deployment.png
+│   ├── system-context.drawio          # Editable source
+│   ├── system-context.png             # Exported for docs
+│   ├── aws-deployment.drawio
+│   ├── aws-deployment.png
+│   └── container-view.drawio
 ├── flows/
-│   ├── auth-sequence.png
-│   ├── checkout-sequence.png
-│   └── order-state.png
+│   ├── auth-sequence.drawio
+│   ├── checkout-sequence.drawio
+│   └── order-state.drawio
 ├── data/
-│   ├── order-erd.png
-│   └── user-domain-class.png
+│   ├── order-erd.drawio
+│   └── user-domain-class.drawio
 └── processes/
-    ├── ci-cd-pipeline.png
-    └── incident-response.png
+    ├── ci-cd-pipeline.drawio
+    └── incident-response.drawio
 ```
+
+---
 
 ## When to Update Diagrams
 

@@ -1,5 +1,21 @@
 {
   "mcpServers": {
+    "drawio": {
+      "command": "npx",
+      "args": ["-y", "@drawio/mcp"],
+      "disabled": false,
+      "autoApprove": []
+    },
+    "drawio-aws": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "https://github.com/aws-samples/sample-drawio-mcp/releases/latest/download/drawio-mcp-server-latest.tgz",
+        "--no-cache"
+      ],
+      "disabled": false,
+      "autoApprove": []
+    },
     "diagrams-mcp": {
       "url": "https://diagrams-mcp-production.up.railway.app/mcp",
       "disabled": false,

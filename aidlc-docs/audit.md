@@ -103,3 +103,24 @@
 **Context**: Construction Phase - Build and Test - All validations passed
 
 ---
+
+## Power Upgrade — Draw.io Integration (Sukrit's Feedback)
+**Timestamp**: 2026-05-13T00:00:00Z
+**User Input**: "As we have created a power yesterday for diagrams, I have some inputs from my team as its not upto the mark and having some references to check, go through the requirement chat and provide me best version of diagram power as required by Sukrit. [Full conversation transcript about quality not being RFP-ready, need for draw.io templates, reference to jgraph/drawio-mcp]"
+**AI Response**: Analyzed Sukrit's feedback. Key issues: (1) AI-generated diagrams not polished enough for RFP responses, (2) Need draw.io template-based approach for professional quality, (3) Reference to jgraph/drawio-mcp and aws-samples/sample-drawio-mcp. Researched both repositories and rebuilt the power with draw.io as primary engine.
+**Context**: Power upgrade based on team feedback — quality improvement for RFP-ready output
+
+---
+
+## Power Upgrade — Changes Made
+**Timestamp**: 2026-05-13T00:01:00Z
+**AI Response**: Upgraded power from 3 MCP servers to 5 MCP servers:
+- Added `drawio` (official jgraph/drawio-mcp via `npx @drawio/mcp`) — PRIMARY engine with 10,000+ shapes, search_shapes tool, XML/CSV/Mermaid support
+- Added `drawio-aws` (aws-samples/sample-drawio-mcp) — AWS-focused with official icons, generates .drawio files locally
+- Retained `diagrams-mcp`, `uml-mcp`, `mcp-mermaid` as secondary/fallback engines
+- Created new steering file: `steering/drawio-xml-guide.md` — comprehensive draw.io XML generation reference
+- Updated all existing files: POWER.md, mcp.json, README.md, diagram-type-selection.md, cloud-architecture-guide.md, workflow-patterns.md
+- Established clear priority hierarchy: drawio > drawio-aws > diagrams-mcp > mcp-mermaid > uml-mcp
+**Context**: Construction Phase — Power upgrade for RFP-quality output
+
+---
