@@ -1,36 +1,45 @@
 # kiro-powers-diagrams
 
-A reusable Kiro Power designed to standardize and automate diagram generation for software architecture, cloud infrastructure, workflows, and engineering documentation across development teams.
+A Kiro Power for generating **professional, RFP-ready diagrams** from natural language. Prioritizes the official draw.io MCP server for polished output with 10,000+ shapes, supplemented by cloud architecture, Mermaid, and PlantUML engines.
 
-## Overview
+## Why This Power?
 
-This power combines **three rendering engines** into a single Kiro Power, giving you access to 30+ diagram types with zero-friction setup:
+Most AI-generated diagrams look basic — fine for developer docs but not suitable for RFPs, proposals, or client-facing documentation. This power solves that by using **draw.io as the primary engine**, producing:
 
-| Engine | Capabilities | Deployment |
-|--------|-------------|------------|
-| **diagrams-mcp** | Cloud architecture with real AWS/GCP/Azure/K8s icons + Mermaid + PlantUML | Remote (Railway) |
-| **uml-mcp** | 30+ diagram types via Kroki/PlantUML/Mermaid, batch generation, validation | Remote (Vercel) |
-| **mcp-mermaid** | Mermaid with themes, multiple output formats | Local (npx) |
+- **Professional quality** — Proper spacing, alignment, icons, and styling
+- **Editable output** — Native .drawio files you can refine in diagrams.net
+- **10,000+ shapes** — AWS, Azure, GCP, Cisco, Kubernetes, UML, BPMN, P&ID, electrical, and more
+- **Multiple formats** — Export to PNG, SVG, PDF from draw.io
+
+For quick developer-facing diagrams, the power also includes cloud architecture (Python-based with real icons), Mermaid, and 30+ diagram types via Kroki.
+
+## Rendering Engines
+
+| Priority | Engine | Capabilities | Quality |
+|----------|--------|-------------|---------|
+| **1st** | **drawio** (official) | All diagram types, 10,000+ shapes, XML/CSV/Mermaid input | ⭐⭐⭐⭐⭐ RFP-ready |
+| **2nd** | **drawio-aws** (AWS samples) | AWS/K8s architecture with official icons, .drawio output | ⭐⭐⭐⭐⭐ Professional |
+| **3rd** | **diagrams-mcp** | Cloud architecture with real provider icons (Python) | ⭐⭐⭐⭐ Good |
+| **4th** | **mcp-mermaid** | Mermaid with themes, offline support | ⭐⭐⭐ Developer docs |
+| **5th** | **uml-mcp** | 30+ types via Kroki (D2, Graphviz, BPMN, C4, TikZ) | ⭐⭐⭐ Functional |
 
 ## Prerequisites
 
 - **Kiro IDE** — [Download from kiro.dev](https://kiro.dev/downloads/)
-- **Node.js v18+** — Required for the local `mcp-mermaid` server (offline fallback)
+- **Node.js v18+** — Required for draw.io MCP servers and mcp-mermaid
   - Verify: `node --version`
   - Install: [nodejs.org](https://nodejs.org/) or `brew install node`
 - **Internet connection** — Required for the two remote MCP servers (diagrams-mcp, uml-mcp)
-
-> **Note**: If you only have internet access (no Node.js), the remote servers still cover all diagram types including Mermaid. Node.js is only needed for the offline local fallback.
 
 ## Installation
 
 ### From GitHub (Recommended)
 
 1. Open Kiro IDE
-2. Open the Powers panel (click the Ghosty icon with lightning bolt ⚡)
+2. Open the Powers panel (click the Powers icon ⚡)
 3. Click **"Add power from GitHub"**
 4. Enter the repository URL: `https://github.com/intraedge-services/kiro-powers-diagrams`
-5. Click Install — the power installs and MCP servers register automatically in `~/.kiro/settings/mcp.json`
+5. Click Install — the power installs and MCP servers register automatically
 
 ### From Local Path (Development)
 
@@ -38,135 +47,122 @@ This power combines **three rendering engines** into a single Kiro Power, giving
    ```bash
    git clone https://github.com/intraedge-services/kiro-powers-diagrams.git
    ```
-2. Open Kiro IDE
-3. Open the Powers panel (click the Ghosty icon with lightning bolt ⚡)
-4. Click **"Add power from Local Path"**
-5. Select the **repository root** directory (the folder containing `POWER.md`)
-6. The power is now installed and activates automatically on keyword mention
-
-> **Important**: When installing from local path, select the directory that contains `POWER.md` at its root — not a subdirectory.
+2. Open Kiro IDE → Powers panel → **"Add power from Local Path"**
+3. Select the repository root directory (the folder containing `POWER.md`)
 
 ## Usage
 
-Once installed, simply mention anything diagram-related in your Kiro chat and the power activates automatically.
+Once installed, mention anything diagram-related in your Kiro chat and the power activates automatically.
 
-### Example Prompts
+### Example Prompts — Professional Quality (Draw.io)
 
 ```
-"Create a flowchart showing user registration flow"
-"Draw an AWS architecture with ECS, RDS, and ElastiCache"
-"Generate a sequence diagram for the checkout API"
-"Create a C4 container diagram for our microservices"
-"Make an ERD for the order management system"
-"Create a Kubernetes deployment diagram"
-"Generate a Gantt chart for the project timeline"
+"Create a professional AWS architecture diagram with CloudFront, API Gateway, Lambda, DynamoDB, and S3. Show VPC with public and private subnets."
+
+"Create an RFP-ready network topology diagram with Cisco routers, switches, and firewalls"
+
+"Create a polished BPMN diagram for the order fulfillment process"
+
+"Create a C4 container diagram for our microservices platform"
+
+"Convert this Mermaid flowchart to a professional draw.io diagram: flowchart LR; A-->B-->C"
+```
+
+### Example Prompts — Quick Developer Diagrams
+
+```
+"Quick flowchart showing user registration flow"
+"Generate a Mermaid sequence diagram for the checkout API"
+"Create a quick AWS architecture with diagrams-mcp showing ECS, RDS, and ElastiCache"
+"Create a Gantt chart for the project timeline"
 ```
 
 ### Activation Keywords
 
-The power activates when you mention: diagram, flowchart, sequence diagram, architecture, UML, mermaid, plantuml, ERD, cloud diagram, AWS architecture, GCP architecture, Azure architecture, kubernetes, C4, BPMN, class diagram, state diagram, Gantt, mindmap, D2, graphviz, kroki, infrastructure diagram, component diagram, deployment diagram
+diagram, flowchart, sequence diagram, architecture, UML, mermaid, plantuml, ERD, cloud diagram, AWS architecture, GCP architecture, Azure architecture, kubernetes, C4, BPMN, class diagram, state diagram, Gantt, mindmap, D2, graphviz, kroki, infrastructure diagram, component diagram, deployment diagram, draw.io, drawio, RFP, professional diagram
 
-## Supported Diagram Types
+## MCP Server Details
 
-### Cloud Architecture (diagrams-mcp)
-- AWS, GCP, Azure, Kubernetes, On-Premise with **real provider icons**
-- Supports all providers from [mingrammer/diagrams](https://diagrams.mingrammer.com/)
+### drawio — Official Draw.io MCP Tool Server (PRIMARY)
+- **Command**: `npx -y @drawio/mcp`
+- **Tools**: `open_drawio_xml`, `open_drawio_csv`, `open_drawio_mermaid`, `search_shapes`
+- **Source**: [jgraph/drawio-mcp](https://github.com/jgraph/drawio-mcp)
+- **Quality**: ⭐⭐⭐⭐⭐ — Professional, editable .drawio output with 10,000+ shapes
 
-### UML & General (uml-mcp via Kroki)
-- **UML**: Class, Sequence, Activity, Use Case, State, Component, Deployment, Object
-- **General**: Mermaid, D2, Graphviz, ERD, BlockDiag, BPMN, C4
-- **Specialized**: TikZ, Excalidraw, Nomnoml, Pikchr, Structurizr, SVGBob, WaveDrom, WireViz
+### drawio-aws — AWS Draw.io MCP Server
+- **Command**: `npx -y https://github.com/aws-samples/sample-drawio-mcp/releases/latest/download/drawio-mcp-server-latest.tgz --no-cache`
+- **Source**: [aws-samples/sample-drawio-mcp](https://github.com/aws-samples/sample-drawio-mcp)
+- **Quality**: ⭐⭐⭐⭐⭐ — Official AWS icons, generates .drawio files locally
 
-### Mermaid (mcp-mermaid)
-- Flowcharts, Sequence, Class, ER, State, Gantt, Pie, Mindmap, Timeline, Quadrant
+### diagrams-mcp — Cloud Architecture (Remote)
+- **URL**: `https://diagrams-mcp-production.up.railway.app/mcp`
+- **Tools**: `render_diagram`, `render_mermaid`, `render_plantuml`, `list_providers`, `list_services`, `list_nodes`, `search_nodes`, `find_equivalent`, `list_categories`
+- **Source**: [ByteOverDev/diagrams-mcp](https://github.com/ByteOverDev/diagrams-mcp)
 
-## Output Formats
+### uml-mcp — 30+ Diagram Types (Remote)
+- **URL**: `https://uml-mcp.vercel.app/mcp`
+- **Tools**: `generate_uml`, `validate_uml`, `list_diagram_types`, `generate_uml_batch`
+- **Source**: [antoinebou12/uml-mcp](https://github.com/antoinebou12/uml-mcp)
 
-| Format | Use Case | Supported By |
-|--------|----------|-------------|
-| PNG | Documentation, PRs, wikis | All engines |
-| SVG | Scalable, web embedding | uml-mcp, mcp-mermaid |
-| PDF | Print-quality documents | uml-mcp |
-| Base64 | Inline embedding | uml-mcp, mcp-mermaid |
-| URL | Shareable links | mcp-mermaid |
-| File | Save to disk | mcp-mermaid, diagrams-mcp |
+### mcp-mermaid — Themed Mermaid (Local)
+- **Command**: `npx -y mcp-mermaid`
+- **Tools**: `mermaid_to_image`
+- **Source**: [hustcc/mcp-mermaid](https://github.com/hustcc/mcp-mermaid)
 
 ## Power Structure
 
 ```
-kiro-powers-diagrams/                     # Repository root
+kiro-powers-diagrams/
 ├── POWER.md                              # Metadata, onboarding, tool guide
-├── mcp.json                              # MCP server configuration
+├── mcp.json                              # MCP server configuration (5 servers)
 ├── README.md                             # This file
 ├── LICENSE                               # License
 ├── steering/                             # Steering files (loaded contextually)
-│   ├── diagram-type-selection.md         # When to use which diagram type
+│   ├── diagram-type-selection.md         # When to use which diagram type/engine
+│   ├── drawio-xml-guide.md              # Draw.io XML generation reference (KEY)
 │   ├── mermaid-reference.md              # Mermaid syntax quick-reference
 │   ├── plantuml-reference.md             # PlantUML syntax quick-reference
 │   ├── cloud-architecture-guide.md       # Cloud architecture patterns
 │   └── workflow-patterns.md              # Diagramming workflow patterns
-└── aidlc-docs/                           # AI-DLC development documentation
+└── aidlc-docs/                           # Development documentation
 ```
 
 ## Steering Files
 
-The power includes comprehensive steering files that Kiro loads contextually:
-
 | File | Loaded When |
 |------|-------------|
-| `diagram-type-selection.md` | Choosing which diagram type to use |
+| `diagram-type-selection.md` | Choosing which diagram type/engine to use |
+| `drawio-xml-guide.md` | Creating professional draw.io XML diagrams |
 | `mermaid-reference.md` | Writing Mermaid diagrams |
 | `plantuml-reference.md` | Writing PlantUML/UML diagrams |
 | `cloud-architecture-guide.md` | Creating cloud architecture diagrams |
 | `workflow-patterns.md` | Planning multi-diagram documentation |
 
-## MCP Server Details
-
-### diagrams-mcp (Remote — No Install)
-- **URL**: `https://diagrams-mcp-production.up.railway.app/mcp`
-- **Tools**: `render_diagram`, `render_mermaid`, `render_plantuml`, `list_providers`, `list_services`, `list_nodes`, `search_nodes`, `find_equivalent`, `list_categories`
-- **Source**: [ByteOverDev/diagrams-mcp](https://github.com/ByteOverDev/diagrams-mcp)
-
-### uml-mcp (Remote — No Install)
-- **URL**: `https://uml-mcp.vercel.app/mcp`
-- **Tools**: `generate_uml`, `validate_uml`, `list_diagram_types`, `generate_uml_batch`
-- **Source**: [antoinebou12/uml-mcp](https://github.com/antoinebou12/uml-mcp)
-
-### mcp-mermaid (Local — Requires Node.js)
-- **Command**: `npx -y mcp-mermaid`
-- **Tools**: `mermaid_to_image`
-- **Source**: [hustcc/mcp-mermaid](https://github.com/hustcc/mcp-mermaid)
-
-## How MCP Servers Get Registered
-
-When you install this power, Kiro **automatically** registers the three MCP servers in your `~/.kiro/settings/mcp.json` under the Powers section. You do **not** need to manually create or edit any `mcp.json` file in your workspace.
-
-If the servers don't appear after installation:
-1. Check `~/.kiro/settings/mcp.json` — the servers should be listed there
-2. If missing, try reinstalling the power
-3. Servers reconnect automatically when the config file is saved
-
 ## Troubleshooting
+
+### drawio server not working
+- Ensure Node.js v18+ is installed: `node --version`
+- Test manually: `npx -y @drawio/mcp` (should start without errors)
+- The server opens diagrams in your default browser via draw.io
+
+### drawio-aws server not working
+- Ensure Node.js v18+ and npx are available
+- Test: `npx -y https://github.com/aws-samples/sample-drawio-mcp/releases/latest/download/drawio-mcp-server-latest.tgz --no-cache`
+- This server generates .drawio files locally — check your working directory
 
 ### Remote servers not responding
 - Check your internet connection
-- The servers may be temporarily down — try again in a few minutes
-- Verify URLs are accessible: `curl -s -o /dev/null -w "%{http_code}" https://diagrams-mcp-production.up.railway.app/mcp`
-
-### mcp-mermaid not working
-- Ensure Node.js v18+ is installed: `node --version`
-- Ensure npx is available: `npx --version`
-- Try running manually: `npx -y mcp-mermaid` (should start without errors)
+- Verify URLs: `curl -s -o /dev/null -w "%{http_code}" https://diagrams-mcp-production.up.railway.app/mcp`
 
 ### Power not activating
 - Verify the power is installed in Kiro's Powers panel
-- Try using explicit keywords like "create a diagram" or "generate a flowchart"
+- Try explicit keywords: "create a professional diagram" or "generate a draw.io architecture"
 - Restart Kiro if the power was just installed
 
 ## Contributing
 
 1. Fork this repository
-2. Make your changes in the `power-diagrams/` directory
+2. Make your changes
 3. Test locally by installing from local path
 4. Submit a pull request
 

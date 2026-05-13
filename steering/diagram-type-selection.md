@@ -2,96 +2,115 @@
 
 Use this guide to choose the right diagram type and rendering engine for your task.
 
+## Golden Rule: Draw.io First
+
+**For any diagram that will be seen by clients, stakeholders, or included in RFPs/proposals — ALWAYS use the `drawio` or `drawio-aws` server.** These produce professional, editable output with proper icons and styling.
+
+Use the other engines (diagrams-mcp, mcp-mermaid, uml-mcp) only for:
+- Quick developer-facing documentation
+- Rapid prototyping/iteration
+- Exotic diagram types not supported by draw.io
+- Offline scenarios (mcp-mermaid)
+
+---
+
 ## Quick Decision Matrix
 
-| I need to show... | Diagram Type | Engine | Tool |
-|-------------------|-------------|--------|------|
-| Cloud infrastructure (AWS/GCP/Azure) | Cloud Architecture | diagrams-mcp | `render_diagram` |
-| Process flow or decision logic | Flowchart | mcp-mermaid or diagrams-mcp | `mermaid_to_image` / `render_mermaid` |
-| How components communicate over time | Sequence Diagram | uml-mcp or mcp-mermaid | `generate_uml` / `mermaid_to_image` |
-| Object relationships and inheritance | Class Diagram | uml-mcp | `generate_uml` (plantuml) |
-| Database schema and relationships | ERD | mcp-mermaid or uml-mcp | `mermaid_to_image` / `generate_uml` |
-| System states and transitions | State Diagram | mcp-mermaid or uml-mcp | `mermaid_to_image` / `generate_uml` |
-| High-level system architecture (C4) | C4 Diagram | uml-mcp | `generate_uml` (c4plantuml) |
-| Business process workflow | BPMN | uml-mcp | `generate_uml` (bpmn) |
-| Project timeline | Gantt Chart | mcp-mermaid | `mermaid_to_image` |
-| Concept relationships | Mind Map | mcp-mermaid | `mermaid_to_image` |
-| Network topology | Network Diagram | diagrams-mcp | `render_diagram` |
-| Deployment architecture | Deployment Diagram | uml-mcp or diagrams-mcp | `generate_uml` / `render_diagram` |
-| Component dependencies | Component Diagram | uml-mcp | `generate_uml` (plantuml) |
-| User interactions with system | Use Case Diagram | uml-mcp | `generate_uml` (plantuml) |
-| Activity workflow | Activity Diagram | uml-mcp | `generate_uml` (plantuml) |
-| Data flow between systems | D2 Diagram | uml-mcp | `generate_uml` (d2) |
-| Graph/network visualization | Graphviz | uml-mcp | `generate_uml` (graphviz) |
-| Chronological events | Timeline | mcp-mermaid | `mermaid_to_image` |
-| Proportional data | Pie Chart | mcp-mermaid | `mermaid_to_image` |
-| Priority/categorization | Quadrant Chart | mcp-mermaid | `mermaid_to_image` |
+| I need to show... | Diagram Type | Engine | Tool | Quality |
+|-------------------|-------------|--------|------|---------|
+| AWS/Azure/GCP architecture (RFP-ready) | Cloud Architecture | **drawio-aws** | (auto) | ⭐⭐⭐⭐⭐ |
+| Any professional diagram with icons | Architecture/Flow | **drawio** | `open_drawio_xml` | ⭐⭐⭐⭐⭐ |
+| Network topology with Cisco/vendor icons | Network Diagram | **drawio** | `open_drawio_xml` + `search_shapes` | ⭐⭐⭐⭐⭐ |
+| Org chart from data | Org Chart | **drawio** | `open_drawio_csv` | ⭐⭐⭐⭐⭐ |
+| Process flow or decision logic | Flowchart | **drawio** | `open_drawio_xml` or `open_drawio_mermaid` | ⭐⭐⭐⭐⭐ |
+| How components communicate over time | Sequence Diagram | **drawio** | `open_drawio_mermaid` or `open_drawio_xml` | ⭐⭐⭐⭐⭐ |
+| Object relationships and inheritance | Class Diagram | **drawio** | `open_drawio_xml` (UML shapes) | ⭐⭐⭐⭐⭐ |
+| Database schema and relationships | ERD | **drawio** | `open_drawio_xml` | ⭐⭐⭐⭐⭐ |
+| System states and transitions | State Diagram | **drawio** | `open_drawio_mermaid` | ⭐⭐⭐⭐ |
+| High-level system architecture (C4) | C4 Diagram | **drawio** | `open_drawio_xml` | ⭐⭐⭐⭐⭐ |
+| Business process workflow | BPMN | **drawio** | `open_drawio_xml` + `search_shapes("bpmn")` | ⭐⭐⭐⭐⭐ |
+| Quick cloud viz (developer docs) | Cloud Architecture | diagrams-mcp | `render_diagram` | ⭐⭐⭐⭐ |
+| Quick Mermaid (developer docs) | Flowchart/Sequence | mcp-mermaid | `mermaid_to_image` | ⭐⭐⭐ |
+| Project timeline | Gantt Chart | mcp-mermaid | `mermaid_to_image` | ⭐⭐⭐ |
+| Concept relationships | Mind Map | mcp-mermaid | `mermaid_to_image` | ⭐⭐⭐ |
+| Exotic types (D2, Graphviz, TikZ) | Specialized | uml-mcp | `generate_uml` | ⭐⭐⭐ |
+| Batch generation (multiple at once) | Multiple | uml-mcp | `generate_uml_batch` | ⭐⭐⭐ |
 
-## Engine Selection Priority
+---
 
-**IMPORTANT**: Always prefer `diagrams-mcp` for PlantUML and Mermaid rendering. It returns reliable hosted image links (Railway). Only use `uml-mcp` for diagram types that `diagrams-mcp` doesn't support.
+## Engine Selection by Use Case
 
-| Diagram Type | Primary Engine | Fallback |
-|-------------|---------------|----------|
-| Cloud Architecture | diagrams-mcp (`render_diagram`) | — |
-| PlantUML (sequence, class, component, state, deployment, activity, use case) | diagrams-mcp (`render_plantuml`) | uml-mcp (kroki.io links — may have availability issues) |
-| Mermaid (flowchart, ER, Gantt, state, sequence, class, pie, mindmap) | diagrams-mcp (`render_mermaid`) | mcp-mermaid (local, themed) |
-| D2, Graphviz, BPMN, C4, TikZ, Nomnoml, Pikchr, etc. | uml-mcp (`generate_uml`) | — |
-| Batch generation (multiple diagrams) | uml-mcp (`generate_uml_batch`) | — |
+### RFP / Proposal / Client-Facing Documentation
+**ALWAYS use `drawio` or `drawio-aws`**
 
-## Engine Selection by Scenario
+Why: Professional styling, proper icons, editable output, consistent branding
 
-### Software Architecture Documentation
-**Primary**: `diagrams-mcp` for cloud architecture, `uml-mcp` for C4 and component diagrams
-- System context → C4 Context (uml-mcp)
-- Container view → C4 Container (uml-mcp)
-- Component view → C4 Component (uml-mcp)
-- Deployment view → Cloud Architecture (diagrams-mcp)
-- Infrastructure → Cloud Architecture with real icons (diagrams-mcp)
+| Diagram Need | Approach |
+|-------------|----------|
+| AWS architecture | `drawio-aws` — generates .drawio with official AWS icons |
+| Multi-cloud architecture | `drawio` — use `search_shapes` for each provider's icons |
+| System architecture | `drawio` — `open_drawio_xml` with containers and proper layout |
+| Network topology | `drawio` — `search_shapes("cisco")` for network icons |
+| Business process | `drawio` — `search_shapes("bpmn")` for BPMN shapes |
+| Data flow | `drawio` — `open_drawio_xml` with proper edge routing |
+| Org chart | `drawio` — `open_drawio_csv` with hierarchical data |
 
-### API and Service Design
-**Primary**: `uml-mcp` for sequence and class diagrams, `mcp-mermaid` for quick flows
-- API flow → Sequence Diagram
-- Data models → Class Diagram or ERD
-- State machines → State Diagram
-- Error flows → Flowchart
+### Developer Documentation (Internal)
+**Use any engine — speed over polish**
 
-### DevOps and Infrastructure
-**Primary**: `diagrams-mcp` for infrastructure, `mcp-mermaid` for CI/CD flows
-- AWS/GCP/Azure architecture → Cloud Architecture (diagrams-mcp)
-- Kubernetes topology → Cloud Architecture with K8s provider (diagrams-mcp)
-- CI/CD pipeline → Flowchart (mcp-mermaid)
-- Deployment strategy → Deployment Diagram (uml-mcp)
+| Diagram Need | Fastest Approach |
+|-------------|-----------------|
+| Quick flowchart | `mcp-mermaid` or `drawio` (`open_drawio_mermaid`) |
+| API sequence diagram | `mcp-mermaid` (Mermaid sequence syntax) |
+| ERD for README | `mcp-mermaid` (Mermaid ER syntax) |
+| Architecture overview | `diagrams-mcp` (`render_diagram` with Python) |
+| State machine | `mcp-mermaid` (Mermaid state syntax) |
 
-### Project Planning
-**Primary**: `mcp-mermaid` for timelines and flows
-- Project schedule → Gantt Chart
-- Feature roadmap → Timeline
-- Decision process → Flowchart
-- Stakeholder analysis → Quadrant Chart
+### Architecture Design Sessions
+**Use `drawio` for the final version, `diagrams-mcp` for quick iterations**
 
-### Database Design
-**Primary**: `mcp-mermaid` for ERDs, `uml-mcp` for complex schemas
-- Simple schema → Mermaid ERD (mcp-mermaid)
-- Complex schema with constraints → PlantUML ERD (uml-mcp)
-- Data flow → D2 Diagram (uml-mcp)
+1. **Iterate quickly** with `diagrams-mcp` (Python code → PNG)
+2. **Finalize** with `drawio` (`open_drawio_xml` with proper styling)
+3. **Share** the .drawio file for team editing
+
+---
+
+## Shape Discovery Workflow
+
+Before creating any draw.io XML diagram, discover the right shapes:
+
+```
+1. search_shapes("aws lambda")     → Get exact style string for Lambda icon
+2. search_shapes("aws vpc")        → Get VPC container style
+3. search_shapes("kubernetes pod") → Get K8s pod icon
+4. search_shapes("cisco router")   → Get Cisco router icon
+5. search_shapes("bpmn gateway")   → Get BPMN decision gateway
+```
+
+The `search_shapes` tool returns exact style strings that you paste directly into the `style` attribute of `mxCell` elements. This ensures you get the correct, high-quality icons every time.
+
+---
 
 ## Output Format Selection
 
-| Need | Format | Engine Support |
-|------|--------|---------------|
-| Embed in markdown/docs | PNG | All engines |
-| Scalable for presentations | SVG | uml-mcp, mcp-mermaid |
-| Share via link | URL | mcp-mermaid (svg_url, png_url) |
-| Print-quality | PDF | uml-mcp |
-| Inline in chat | base64 | uml-mcp, mcp-mermaid |
-| Save to project | file | mcp-mermaid, diagrams-mcp |
+| Need | Best Engine | Format |
+|------|-------------|--------|
+| Editable diagram for team | **drawio** | .drawio file (XML) |
+| Embed in RFP/proposal | **drawio** → export to PNG/PDF | PNG or PDF |
+| Embed in markdown/docs | diagrams-mcp or mcp-mermaid | PNG |
+| Scalable for presentations | **drawio** → export to SVG | SVG |
+| Share via link | mcp-mermaid | URL (svg_url, png_url) |
+| Print-quality | **drawio** → export to PDF | PDF |
+| Inline in chat | mcp-mermaid or uml-mcp | base64 |
+| Save to project repo | **drawio** or mcp-mermaid (file) | .drawio or PNG |
+
+---
 
 ## When to Use Multiple Engines Together
 
-For comprehensive documentation projects, combine engines:
+For comprehensive documentation projects:
 
-1. **System overview**: diagrams-mcp (cloud architecture with real icons)
-2. **Detailed interactions**: uml-mcp (sequence diagrams via PlantUML)
-3. **Quick developer docs**: mcp-mermaid (flowcharts, ERDs in markdown)
-4. **Batch generation**: uml-mcp (`generate_uml_batch` for multiple diagrams at once)
+1. **Final deliverable diagrams** → `drawio` or `drawio-aws` (professional quality)
+2. **Quick iteration/drafts** → `diagrams-mcp` or `mcp-mermaid` (fast feedback)
+3. **Batch generation for dev docs** → `uml-mcp` (`generate_uml_batch`)
+4. **Convert draft to polished** → Generate in Mermaid, then use `open_drawio_mermaid` to get editable draw.io version
